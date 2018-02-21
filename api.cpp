@@ -5,6 +5,7 @@
 #include <vector>
 
 typedef std::string String;
+typedef std::vector<int16_t> Int16Array;
 
 class Encoder{
   public:
@@ -85,6 +86,62 @@ class Encoder{
     int channels;
     OpusEncoder *enc;
     std::vector<int16_t> samples;
+};
+
+class Decoder{
+  public:
+    Decoder(int _channels, long int _samplerate): dec(NULL), samplerate(_samplerate), channels(_channels)
+    {
+      int err;
+      dec = opus_decoder_create(samplerate, channels, &err);
+
+      if(dec == NULL)
+        std::cerr << "[libopusjs] error while creating opus decoder (errcode " << err << ")" << std::endl;
+    }
+
+    void input(const char *data, size_t size)
+    {
+      packets.push_back(std::string(data,size));
+    }
+
+    bool output(Int16Array *out)
+    {
+      bool ok = false;
+
+      if(packets.size() > 0 && dec != NULL){
+        int ret_size = 0;
+
+        long int buffer_size = 120/1000.0*samplerate*channels; //120ms max
+        int16_t *buffer = new int16_t[buffer_size];
+
+        //extract samples from packets
+        std::string &packet = packets[0];
+
+        if(packet.size() > 0)
+          ret_size = opus_decode(dec, (const unsigned char*)packet.c_str(), packet.size(), buffer, buffer_size/channels, 0);
+
+        if(ret_size > 0){
+          *out = std::vector<int16_t>(buffer, buffer+ret_size*channels);
+          ok = true;
+        }
+
+        packets.erase(packets.begin());
+        delete [] buffer;
+      }
+
+      return ok;
+    }
+
+    ~Decoder()
+    {
+      if(dec)
+        opus_decoder_destroy(dec);
+    }
+
+  private:
+    long int samplerate;
+    int channels;
+    OpusDecoder *dec;
     std::vector<std::string> packets;
 };
 
@@ -112,6 +169,28 @@ EMSCRIPTEN_KEEPALIVE bool Encoder_output(Encoder *self, String *out)
   return self->output(out);
 }
 
+// Decoder
+
+EMSCRIPTEN_KEEPALIVE Decoder* Decoder_new(int channels, long int samplerate)
+{
+  return new Decoder(channels, samplerate);
+}
+
+EMSCRIPTEN_KEEPALIVE void Decoder_delete(Decoder *self)
+{
+  delete self;
+}
+
+EMSCRIPTEN_KEEPALIVE void Decoder_input(Decoder *self, const char* data, size_t size)
+{
+  self->input(data,size);
+}
+
+EMSCRIPTEN_KEEPALIVE bool Decoder_output(Decoder *self, Int16Array *out)
+{
+  return self->output(out);
+}
+
 // String
 
 EMSCRIPTEN_KEEPALIVE size_t String_size(String *self)
@@ -134,4 +213,27 @@ EMSCRIPTEN_KEEPALIVE void String_delete(String *self)
   delete self;
 }
 
+// Int16Array
+
+EMSCRIPTEN_KEEPALIVE size_t Int16Array_size(Int16Array *self)
+{
+  return self->size();
 }
+
+EMSCRIPTEN_KEEPALIVE Int16Array* Int16Array_new()
+{
+  return new std::vector<int16_t>();
+}
+
+EMSCRIPTEN_KEEPALIVE const int16_t* Int16Array_data(Int16Array *self)
+{
+  return &(*self)[0];
+}
+
+EMSCRIPTEN_KEEPALIVE void Int16Array_delete(Int16Array *self)
+{
+  delete self;
+}
+
+}
+
