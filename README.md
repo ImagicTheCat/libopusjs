@@ -47,6 +47,8 @@ Decoder.output()
 
 # Usage
 
+Input data to the encoder or the decoder, then loop over the output call until it returns null. A single input can give multiple outputs or none.
+
 See `test.js`.
 
 ```js
@@ -68,3 +70,4 @@ enc.destroy();
 // destroy decoder
 dec.destroy();
 ```
+
