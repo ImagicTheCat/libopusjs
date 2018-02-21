@@ -1,6 +1,11 @@
 // Encoder
 
-function Encoder()
+// create encoder
+// channels: 1-2
+// samplerate: 8000,12000,16000,24000,48000
+// bitrate: in bytes 
+// voice_optimization: true/false 
+function Encoder(channels, samplerate, bitrate, voice_optimization)
 {
   this.enc = Module._Encoder_new.apply(null, arguments);
   this.out = Module._String_new();
@@ -36,7 +41,9 @@ Encoder.prototype.output = function()
 
 // Decoder
 
-function Decoder()
+// create decoder
+// channels and samplerate should match the encoder options
+function Decoder(channels, samplerate)
 {
   this.dec = Module._Decoder_new.apply(null, arguments);
   this.out = Module._Int16Array_new();
