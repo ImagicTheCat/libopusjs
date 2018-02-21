@@ -12,7 +12,7 @@ Opus allow to encode audio without container and can handle packet loss, which m
 // create encoder
 // channels: 1-2
 // samplerate: 8000,12000,16000,24000,48000
-// bitrate: in bytes 
+// bitrate
 // voice_optimization: true/false 
 Encoder(channels, samplerate, bitrate, voice_optimization)
 
