@@ -49,7 +49,7 @@ function Decoder(channels, samplerate)
   this.out = Module._Int16Array_new();
 }
 
-// free encoder memory
+// free decoder memory
 Decoder.prototype.destroy = function()
 { 
   Module._Decoder_delete(this.dec); 

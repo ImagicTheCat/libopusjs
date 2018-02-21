@@ -33,7 +33,7 @@ Encoder.output()
 // channels and samplerate should match the encoder options
 Decoder(channels, samplerate)
 
-// free encoder memory
+// free decoder memory
 Decoder.destroy()
 
 // add packet to the decoder buffer
