@@ -45,6 +45,16 @@ Decoder.input(packet)
 Decoder.output()
 ```
 
+# Loading
+
+You can use the `asm.js` or `wasm` version, the WebAssembly is much faster in nodejs/browser than the asm.js version on my computer. `asm.js` also has limited memory.
+Since the WebAssembly version will need to load the `.wasm` file, a url scheme like `http` is required and the library will be asynchronously loaded.
+
+`libopus.loaded` will be true when loaded and `libopus.onload` will be called if defined. Using asm.js, `libopus.onload` will probably never be called because it was not yet defined. See `test.js`.
+
+* asm.js: `dist/libopus.asm.js`
+* wasm: `dist/libopus.wasm.js dist/libopus.wasm`
+
 # Usage
 
 Input data to the encoder or the decoder, then loop over the output call until it returns null. A single input can give multiple outputs or none.
@@ -70,4 +80,3 @@ enc.destroy();
 // destroy decoder
 dec.destroy();
 ```
-

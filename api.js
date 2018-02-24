@@ -81,6 +81,7 @@ Decoder.prototype.output = function()
 //export objects
 Module.Encoder = Encoder;
 Module.Decoder = Decoder;
+
 //make the module global if not using nodejs
 if(Module["ENVIRONMENT"] != "NODE")
   libopus = Module;
