@@ -48,7 +48,7 @@ Decoder.output()
 # Loading
 
 You can use the `asm.js` or `wasm` version, the WebAssembly is much faster in nodejs/browser than the asm.js version on my computer. `asm.js` also has limited memory.
-Since the WebAssembly version will need to load the `.wasm` file, a url scheme like `http` is required and the library will be asynchronously loaded.
+Since the WebAssembly version will need to load the `.wasm` file, a url scheme like `http` is required and the library will be asynchronously loaded. It will load the `libopus.wasm` file relative to `libopus.wasm.js`, unless the global `LIBOPUS_WASM_URL` exists (containing the URL).
 
 `libopus.loaded` will be true when loaded and `libopus.onload` will be called if defined. Using asm.js, `libopus.onload` will probably never be called because it was not yet defined. See `test.js`.
 
