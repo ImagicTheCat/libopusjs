@@ -1,12 +1,20 @@
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 
-# libopusjs
+= libopusjs
 
-This project is mostly about having access to the low-level packet encoding/decoding API of libopus in JavaScript.
+This project is mostly about having access to the low-level packet encoding/decoding API of libopus in JavaScript. +
 Opus allow to encode audio without container and can handle packet loss, which makes it very suitable for VoIP over UDP (it also has voice optimizations).
 
-# API
+== API
 
-```js
+[source, js]
+----
 // Encoder
 
 // create encoder
@@ -43,25 +51,31 @@ Decoder.input(packet)
 // output the next decoded samples
 // return samples (interleaved if multiple channels) as Int16Array (valid until the next output call) or null if there is no output
 Decoder.output()
-```
+----
 
-# Loading
+== Loading
 
+[NOTE]
+--
 You can use the `asm.js` or `wasm` version, the WebAssembly is much faster in nodejs/browser than the asm.js version on my computer. `asm.js` also has limited memory.
 Since the WebAssembly version will need to load the `.wasm` file, a url scheme like `http` is required and the library will be asynchronously loaded. It will load the `libopus.wasm` file relative to `libopus.wasm.js`, unless the global `LIBOPUS_WASM_URL` exists (containing the URL).
 
 `libopus.loaded` will be true when loaded and `libopus.onload` will be called if defined. Using asm.js, `libopus.onload` will probably never be called because it was not yet defined. See `test.js`.
+--
 
-* asm.js: `dist/libopus.asm.js`
-* wasm: `dist/libopus.wasm.js dist/libopus.wasm`
+[horizontal]
+.Files
+asm.js:: `dist/libopus.asm.js`
+wasm:: `dist/libopus.wasm.js dist/libopus.wasm`
 
-# Usage
+== Usage
 
 Input data to the encoder or the decoder, then loop over the output call until it returns null. A single input can give multiple outputs or none.
 
 See `test.js`.
 
-```js
+[source,js]
+----
 // nodejs: 
 var libopus = require("./libopus.js");
 
@@ -79,4 +93,4 @@ enc.destroy();
 
 // destroy decoder
 dec.destroy();
-```
+----
