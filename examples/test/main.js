@@ -1,6 +1,9 @@
 
-if(typeof require != "undefined" && typeof libopus == "undefined")
-  libopus = require("./libopus.js");
+
+if(typeof require != "undefined" && typeof libopus == "undefined"){
+  LIBOPUS_WASM_URL = "../../dist/libopus.wasm";
+  libopus = require("../../dist/libopus.wasm.js");
+}
 
 libopus.onload = function(){
   var start = new Date().getTime();
