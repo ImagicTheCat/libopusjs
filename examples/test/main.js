@@ -8,7 +8,7 @@ if(typeof require != "undefined" && typeof libopus == "undefined"){
 libopus.onload = function(){
   var start = new Date().getTime();
 
-  var enc = new libopus.Encoder(1,48000,24000,false);
+  var enc = new libopus.Encoder(1,48000,24000,20,false);
   var dec = new libopus.Decoder(1,48000);
 
   var samples = new Int16Array(48000);

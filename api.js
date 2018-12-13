@@ -3,9 +3,10 @@
 // create encoder
 // channels: 1-2
 // samplerate: 8000,12000,16000,24000,48000
-// bitrate
+// bitrate: see Opus recommended bitrates
+// frame_size: frame size in milliseconds (2.5,5,10,20,40,60), 20 is recommended
 // voice_optimization: true/false 
-function Encoder(channels, samplerate, bitrate, voice_optimization)
+function Encoder(channels, samplerate, bitrate, frame_size, voice_optimization)
 {
   this.enc = Module._Encoder_new.apply(null, arguments);
   this.out = Module._String_new();
